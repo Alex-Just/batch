@@ -6,12 +6,14 @@ This project demonstrates how to set up AWS Batch using Terraform and ECS for ru
 
 ```
 .
-├── terraform/          # Terraform configuration files
-├── app/                # Application code
-│   └── worker/         # Worker application code
-├── Makefile            # Commands for deployment and management
-├── monitor.sh          # Job monitoring script
-└── README.md           # This file
+├── terraform/             # Terraform configuration files
+├── app/                   # Application code
+│   └── worker/            # Worker application code
+├── Makefile               # Commands for deployment and management
+├── deploy.sh              # Deployment script
+├── monitor.sh             # Job monitoring script
+├── aws-batch-policy.json  # AWS IAM policy for Batch
+└── README.md              # This file
 ```
 
 ## Prerequisites
@@ -78,9 +80,9 @@ jq --version
 
 ## Setup and Deployment
 
-1. Make the monitoring script executable:
+1. Make the scripts executable:
    ```bash
-   chmod +x monitor.sh
+   chmod +x monitor.sh deploy.sh
    ```
 
 2. Deploy the infrastructure:
@@ -88,15 +90,15 @@ jq --version
    make deploy
    ```
 
-## Running Jobs
+## Usage
 
-All operations are managed through the Makefile. Available commands:
+The project includes a Makefile with common commands. Here's how to use it:
 
 ```bash
-# Show all available commands and their descriptions
+# Show available commands
 make help
 
-# Deploy infrastructure
+# Deploy infrastructure and submit a test job
 make deploy
 
 # Submit a new job
@@ -107,9 +109,15 @@ make monitor JOB_ID=xxx
 
 # View logs for a specific job
 make logs JOB_ID=xxx
+
+# Clean up Terraform-managed resources
+make clean
+
+# Clean up everything (including Docker images and ECR repository)
+make clean-all
 ```
 
-## Monitoring Options
+### Monitoring Options
 
 1. **Using Makefile commands:**
    ```bash
@@ -161,33 +169,6 @@ The application uses AWS Batch to manage and execute batch processing jobs:
    - Verify CloudWatch log group exists
    - Check task execution role permissions
    - Wait a few minutes for logs to propagate
-
-## Usage
-
-The project includes a Makefile with common commands:
-
-```bash
-# Show available commands
-make help
-
-# Deploy infrastructure and submit a test job
-make deploy
-
-# Submit a new job
-make submit-job
-
-# Monitor a specific job
-make monitor JOB_ID=xxx
-
-# View logs for a specific job
-make logs JOB_ID=xxx
-
-# Clean up Terraform-managed resources
-make clean
-
-# Clean up everything (including Docker images and ECR repository)
-make clean-all
-```
 
 ### Sample Job Execution Flow
 

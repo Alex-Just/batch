@@ -14,7 +14,7 @@
 
 output "batch_job_queue_name" {
   description = "The name of the AWS Batch job queue"
-  value       = aws_batch_job_queue.job_queue.name
+  value       = try(aws_batch_job_queue.job_queue[0].name, data.aws_batch_job_queue.existing.name)
 }
 
 output "batch_job_definition_name" {
@@ -24,7 +24,7 @@ output "batch_job_definition_name" {
 
 output "batch_compute_environment_name" {
   description = "The name of the AWS Batch compute environment"
-  value       = aws_batch_compute_environment.compute_environment.compute_environment_name
+  value       = try(aws_batch_compute_environment.batch_compute_env[0].compute_environment_name, data.aws_batch_compute_environment.existing.compute_environment_name)
 }
 
 output "vpc_id" {
